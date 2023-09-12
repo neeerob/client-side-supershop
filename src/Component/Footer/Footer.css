@@ -1,0 +1,76 @@
+/* Footer Styles */
+
+/* Footer Container */
+.footer {
+  box-shadow: 0px 2px 5px #0000001a;
+  background-color: #212121;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    margin: 1rem;
+    font-family: Georgia, serif;
+    margin-left: 60px;
+    padding: 1 0px;
+    text-decoration: none;
+    color: #fff;
+    transition: color 0.3s ease;
+
+  }
+
+
+  /* Logo and Company Name */
+  .footer-logo {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+  
+  .footer-logo .logo {
+    width: 50px; /* Adjust the width as needed */
+    height: auto;
+    margin-right: 10px;
+  }
+  
+  .footer-logo .company-name {
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.5rem;
+  }
+  
+  /* Navigation Links */
+  .footer-links ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    margin-bottom: 1rem;
+  }
+  
+  .footer-links li {
+    margin-right: 1rem;
+  }
+  
+  .footer-links a {
+    text-decoration: none;
+    color: #fff;
+    transition: color 0.3s ease;
+  }
+  
+  .footer-links a:hover {
+    color: #4b5be2;
+  }
+  
+  .footer-bottom {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 1rem;
+  }
+
+  .footer-logo .company-name {
+    font-weight: bold;
+    font-size: 1.5rem;
+    font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+
+
+  }
+  
+  
