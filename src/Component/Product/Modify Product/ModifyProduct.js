@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Autocomplete from '@mui/material/Autocomplete';
-import ProductCardContainer from '../Component/Product/ProductCardContainer';
+import ProductCardContainerModify from './ProductCardContainerModify';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 
-const Home = () => {
+const ModifyProduct = () => {
   const [searchValue, setSearchValue] = useState('');
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -52,7 +52,7 @@ const Home = () => {
 
         <br></br>
       </div>
-      {filteredProducts ? (<ProductCardContainer products={filteredProducts} />
+      {filteredProducts ? (<ProductCardContainerModify products={filteredProducts} />
       ) : (
         <Box sx={{ display: 'flex' }}>
           <CircularProgress />
@@ -63,4 +63,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default ModifyProduct;

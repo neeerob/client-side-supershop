@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import ProductCard from './ProductCard';
+import ProductCardModify from './ProductCardModify';
 import './ProductCard.css';
 
-const ProductCardContainer = ({ products, onDeleteProduct }) => {
+const ProductCardContainerModify = ({ products, onDeleteProduct }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 5;
   const maxVisiblePages = 5; // Change this to adjust the number of visible pages
@@ -35,7 +35,7 @@ const ProductCardContainer = ({ products, onDeleteProduct }) => {
         <div className="product-grid">
           {displayedProducts.map((product) => (
             <div className="product-item" key={product._id}>
-              <ProductCard product={product} />
+              <ProductCardModify product={product} />
             </div>
           ))}
         </div>
@@ -69,4 +69,4 @@ const ProductCardContainer = ({ products, onDeleteProduct }) => {
   );
 };
 
-export default ProductCardContainer;
+export default ProductCardContainerModify;

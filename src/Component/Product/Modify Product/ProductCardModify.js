@@ -15,7 +15,7 @@ import DeleteForever from '@mui/icons-material/DeleteForever';
 import WarningRoundedIcon from '@mui/icons-material/WarningRounded';
 import axios from 'axios'; // Import Axios
 
-const ProductCard = ({ product, onDelete }) => {
+const ProductCardModify = ({ product, onDelete }) => {
   console.log(product.image);
   const [open, setOpen] = React.useState(false);
   const handleDeleteProduct = async () => {
@@ -34,7 +34,7 @@ const ProductCard = ({ product, onDelete }) => {
 
   return (
     
-    <Link to={`/productdetails/${product._id}`} className='cardClass link-no-underline'>
+    <Link to={`/productModify/${product._id}`} className='cardClass link-no-underline'>
     <Card className='cardClass' sx={{ maxWidth: 345 }}>
       <CardMedia
         component="img"
@@ -108,4 +108,4 @@ const ProductCard = ({ product, onDelete }) => {
   );
 };
 
-export default ProductCard;
+export default ProductCardModify;

@@ -1,61 +1,5 @@
-/* .sidebar {
-    background-color: #f8f8f8;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-    margin: 1rem;
-    font-family: Georgia, serif;
-    width: 25k0px;
-    background-color: #b7a7a7;
-    color: #fff;
-    position: fixed;
-    top: 0;
-    height: 90%;
-  }
-  
-  .custom-hr {
-    width: 100%;
-    height: 4px;
-    background-color: #9da39d; 
-    border: none;
-    margin: 5px 0;
-    }
 
-  .logo {
-    display: flex;
-    align-items: center;
-    padding: 20px;
-    font-size: 1.5rem;
-    color: #fff;
-  }
-  
-  .logo img {
-    width: 30px;
-    height: 30px;
-    margin-right: 10px;
-  }
-  
-  .sidebar-nav {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .sidebar-nav li {
-    padding: 10px 20px;
-  }
-  
-  .sidebar-nav a {
-    text-decoration: none;
-    color: #fff;
-    transition: color 0.3s ease;
-  }
-  
-  .sidebar-nav a:hover {
-    color: #f57f17;
-  }
-   */
-
-   @import url(//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css);
+@import url(//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css);
 
 @import url(https://fonts.googleapis.com/css?family=Titillium+Web:300);
 .fa-2x {
@@ -70,6 +14,10 @@ text-align: center;
 vertical-align: middle;
 font-size:20px;
 /* top: 60px; */
+}
+
+.active{
+  color: aqua;
 }
 
 
