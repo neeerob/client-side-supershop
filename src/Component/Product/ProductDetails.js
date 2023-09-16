@@ -5,12 +5,13 @@ import Box from '@mui/material/Box';
 import axios from 'axios';
 import Typography from '@mui/joy/Typography';
 import DeleteForever from '@mui/icons-material/DeleteForever';
-import './ProductCard.css'
+import './ProductCard.css';
 import Divider from '@mui/joy/Divider';
 import Modal from '@mui/joy/Modal';
 import ModalDialog from '@mui/joy/ModalDialog';
 import WarningRoundedIcon from '@mui/icons-material/WarningRounded';
 import Button from '@mui/joy/Button';
+import { useLocation } from 'react-router-dom';
 
 import {
   Card,
@@ -24,23 +25,75 @@ import {
 import { AddCircleOutline, RemoveCircleOutline } from '@mui/icons-material';
 
 const ProductDetail = () => {
+
+  const [sales, setSales] = useState([]);
+  const [newSaleId, setNewSaleId] = useState('');
+
+  useEffect(() => {
+    const storedSales = JSON.parse(localStorage.getItem('sales')) || [];
+    setSales(storedSales);
+  }, []);
+
+
   const { productId } = useParams();
   const [productData, setProductData] = useState(null);
   const [stockData, setStockData] = useState(null);
   const [quantity, setQuantity] = useState(1);
 
   const [open, setOpen] = React.useState(false);
-  const handleDeleteProduct = async () => {
-    try {
-      const data = await axios.delete(`http://localhost:5000/product/delete/${productId}`);
-      setOpen(false);
-      alert("Successfully deleted!");
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000); 
-    } catch (error) {
-      console.error('Error deleting product:', error);
-      alert("Error deleting product!");
+  const [salePrice, setSalePrice] = useState('');
+  const [discount, setDiscount] = useState('');
+
+  const handleSellButtonClick = () => {
+    setOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setOpen(false);
+  };
+
+  const handleSale = async () => {
+    const apiUrlPush = `http://localhost:5000/sales/registerSales/${discount}`
+    const dataPush = {
+      "productId": productId,
+      "quantitySold" : quantity,
+      "salePrice": salePrice
+    };
+    try{
+      if(salePrice && discount){
+        const response = await axios.post(apiUrlPush, dataPush);
+        console.log(response.data);
+        setOpen(false);
+        const timeAndDath = new Date();
+        const newSale = { 
+          saleId: response.data.data._id, 
+          quantitySold:quantity, 
+          salePrice: salePrice, 
+          costPrice:productData.price, 
+          date: timeAndDath, 
+          discount:discount, 
+          productName:productData.productName,
+          description: productData.description,
+          image: productData.image,
+        };
+        console.log(newSale);
+        const updatedSales = [...sales, newSale];
+        setSales(updatedSales);
+        localStorage.setItem('sales', JSON.stringify(updatedSales));
+
+        setNewSaleId('');
+
+        alert('Successfully sold product');
+        setTimeout(() => {
+          window.location.href = `/`;
+        }, 500); 
+    }
+    else{
+      alert('Please enter sale price and discount amount');
+    }
+
+    }catch(err){
+      console.error('Error selling product:', err);
     }
   };
 
@@ -99,13 +152,13 @@ const ProductDetail = () => {
                 src={productData.image}
                 height="600"
                 width="100"
-                style={{objectFit: 'fill'}}
+                style={{ objectFit: 'fill' }}
               />
             </Card>
           </Grid>
           <br /><br />
           <Grid item xs={12} sm={6}>
-            <Card style={{marginRight: '35px'}}>
+            <Card style={{ marginRight: '35px' }}>
               <CardContent>
                 <Typography
                   color="neutral"
@@ -119,7 +172,6 @@ const ProductDetail = () => {
                 <div className="description-container">
                   <p className="description-text">{productData.description}</p>
                 </div>
-
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <Typography
@@ -140,7 +192,6 @@ const ProductDetail = () => {
                     Total Price: ${productData.price * quantity}
                   </Typography>
                 </div>
-
 
                 <Typography variant="body1">
                   Stock Quantity: {stockData.stockQuantity}
@@ -168,73 +219,150 @@ const ProductDetail = () => {
                   </IconButton>
                 </Paper>
               </CardContent>
-              <div style={{marginRight: '35px', marginLeft:'35px'}}>
-              <Button
-                className='button-31'
-                variant="contained"
-                color="primary"
-                disabled={quantity > stockData.stockQuantity}
-                style={{
-                  backgroundColor: '#222',
-                  color: 'white',
-                }}
-                classes={{
-                  root: 'button-root',
-                  disabled: 'page-buttons',
-                }}
-              >
-                Sell
-              </Button>
-              <Button
-                className='button-31'
-                variant="contained"
-                color="primary"
-                onClick={() => setOpen(true)}
-                style={{
-                  backgroundColor: '#f05668',
-                  color: 'white',
-                  top: '5px'
-                }}
-                classes={{
-                  root: 'button-root',
-                  disabled: 'page-buttons',
-                }}
-              >
-                Delete Product
-              </Button>
+              <div style={{ marginRight: '35px', marginLeft: '35px' }}>
+                {quantity > stockData.stockQuantity ? (
+                  <Button
+                    className='button-31'
+                    variant="contained"
+                    color="primary"
+                    disabled
+                    style={{
+                      backgroundColor: '#ccc',
+                      color: '#666',
+                      cursor: 'not-allowed',
+                      opacity: '0.7',
+                      '&:hover': {
+                        backgroundColor: '#252',
+                        color: 'white',
+                        opacity: '0.7',
+                      },
+                    }}
+                  >
+                    Insufficient Quantity
+                  </Button>
+                ) : (
+                    <Button
+                      className='button-31'
+                      variant="contained"
+                      color="primary"
+                      disabled={quantity > stockData.stockQuantity}
+                      onClick={handleSellButtonClick}
+                      style={{
+                        backgroundColor: '#222',
+                        color: 'white',
+                      }}
+                      classes={{
+                        root: 'button-root',
+                        disabled: 'page-buttons',
+                      }}
+                    >
+                      Sell
+                    </Button>
+                  )}
               </div>
-              <br/><br/>
+              <br /><br />
             </Card>
-            <React.Fragment>
-      <Modal open={open} onClose={() => setOpen(false)}>
-        <ModalDialog
-          variant="outlined"
-          role="alertdialog"
-          aria-labelledby="alert-dialog-modal-title"
-          aria-describedby="alert-dialog-modal-description"
-        >
-          <Typography
-            id="alert-dialog-modal-title"
-            level="h2"
-            startdecorator={<WarningRoundedIcon />}
-          >
-            Confirmation
-          </Typography>
-          <Divider />
-          <Typography id="alert-dialog-modal-description" textcolor="text.tertiary">
-            Are you sure you want to delete this product?
-          </Typography>
-          <Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end', pt: 2 }}>
-            <Button variant="plain" color="neutral" onClick={() => setOpen(false)}>
-              Cancel
-            </Button>
-            <Button variant="solid" color="danger" onClick={handleDeleteProduct}>
-              Delete product
-            </Button>
-          </Box>
-        </ModalDialog>
-      </Modal>
-      </React.Fragment>
+            <Modal open={open} onClose={handleModalClose}>
+              <ModalDialog
+                variant="outlined"
+                role="alertdialog"
+                aria-labelledby="alert-dialog-modal-title"
+                aria-describedby="alert-dialog-modal-description"
+              >
+                <Typography
+                  id="alert-dialog-modal-title"
+                  level="h2"
+                  startdecorator={<WarningRoundedIcon />}
+                >
+                  Sell Product: {productData.productName}
+                </Typography>
+                <Divider />
+
+                <div style={{ display: 'flex', marginTop:'5px', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Typography
+                    color="primary"
+                    level="h4"
+                    variant="plain"
+                    noWrap
+                    style={{marginBottom: '10px'}}
+                  >
+                    Buying Price: ${productData.price.toFixed(2)}
+                  </Typography>
+
+                  <Typography
+                    color="success"
+                    level="h4"
+                    variant="plain"
+                    noWrap
+                    style={{marginBottom: '10px'}}
+                  >
+                    Quantity: {quantity}
+                  </Typography>
+
+                </div>
+
+                <Box p={1}>
+                  <TextField
+                    label="Sale Price"
+                    type="number"
+                    fullWidth
+                    value={salePrice}
+                    required
+                    onChange={(e) => setSalePrice(e.target.value)}
+                  />
+                  <TextField
+                    label="Discount"
+                    type="number"
+                    fullWidth
+                    required
+                    value={discount}
+                    onChange={(e) => setDiscount(e.target.value)}
+                    style={{marginTop: '10px'}}
+                  />
+                </Box>
+                <Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end', pt: 2 }}>
+                  <Typography>
+                    Total Price: ${(salePrice * quantity).toFixed(2)}
+                  </Typography>
+                </Box>
+                {/* <Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end', pt: 2 }}>
+                  <Typography>
+                    Net Total: ${(salePrice * quantity - discount).toFixed(2)}
+                  </Typography>
+                </Box> */}
+                <Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end', pt: 2 }}>
+                  <Typography>
+                    Net Profit: ${(productData.price * quantity).toFixed(2)}
+                  </Typography>
+                </Box>
+                <Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end', pt: 2 }}>
+                  <Typography>
+                    Net Revenue: ${((salePrice * quantity - discount) - (productData.price * quantity)).toFixed(2)}
+                  </Typography>
+                </Box>
+                <Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end', pt: 2 }}>
+                  <Typography
+                    color="primary"
+                    level="h5"
+                    variant="plain"
+                    noWrap
+                    style={{marginBottom: '10px'}}
+                  >
+                    Net Total: ${(salePrice * quantity - discount).toFixed(2)}
+                  </Typography>
+                </Box>
+
+                <Divider/>
+                <Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end', pt: 2 }}>
+                  <Button variant="plain" color="neutral" onClick={handleModalClose}>
+                    Cancel
+                  </Button>
+                  <Button variant="solid" color="primary" onClick={handleSale}>
+                    Confirm Sale
+                  </Button>
+                </Box>
+              </ModalDialog>
+            </Modal>
           </Grid>
         </Grid>
       ) : (

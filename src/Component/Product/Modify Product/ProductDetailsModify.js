@@ -11,6 +11,7 @@ import Modal from '@mui/joy/Modal';
 import ModalDialog from '@mui/joy/ModalDialog';
 import WarningRoundedIcon from '@mui/icons-material/WarningRounded';
 import Button from '@mui/joy/Button';
+import { Link } from 'react-router-dom';
 
 import {
   Card,
@@ -29,18 +30,47 @@ const ProductDetailModify = () => {
   const [stockData, setStockData] = useState(null);
   const [quantity, setQuantity] = useState(1);
 
+  const [deleteInput, setDeleteInput] = useState('');
+  
+
+  const isDeleteInputValid = deleteInput.trim().toLowerCase() === 'delete';
+
+  const handleInputChange = (e) => {
+    setDeleteInput(e.target.value);
+  };
+
+  const handleCloseModal = () => {
+    setDeleteInput('');
+    setOpen(false);
+  };
+
   const [open, setOpen] = React.useState(false);
+  const [openStock, setOpenStock] = React.useState(false);
   const handleDeleteProduct = async () => {
     try {
       const data = await axios.delete(`http://localhost:5000/product/delete/${productId}`);
       setOpen(false);
       alert("Successfully deleted!");
       setTimeout(() => {
-        window.location.reload();
-      }, 1000); 
+        window.location.href = '/modify'
+      }, 500); 
     } catch (error) {
       console.error('Error deleting product:', error);
       alert("Error deleting product!");
+    }
+  };
+
+  const handelStockUpdateProduct = async () => {
+    try {
+      const data = await axios.post(`http://localhost:5000/stock/updateStock/${productId}/${quantity}`);
+      setOpen(false);
+      alert("Successfully Updated product stock!");
+      setTimeout(() => {
+        window.location.reload();
+      }, 500); 
+    } catch (error) {
+      console.error('Error updating stock:', error);
+      alert("Error updating stock!");
     }
   };
 
@@ -162,29 +192,6 @@ const ProductDetailModify = () => {
                 </Paper>
                 </div>
                 <div>
-                <Button
-                className='button-31'
-                variant="contained"
-                color="primary"
-                style={{
-                  backgroundColor: '#35bd50',
-                  color: 'white',
-                  top: '5px',
-                  right: '20px'
-                }}
-                classes={{
-                  root: 'button-root',
-                  disabled: 'page-buttons',
-                }}
-              >
-                Update Stock
-              </Button>
-                </div>
-
-                </div>
-              </CardContent>
-              {/* marginTop:'100px', */}
-              <div style={{marginRight: '35px', marginLeft:'35px'}}>
               <Button
                 className='button-31'
                 variant="contained"
@@ -202,11 +209,148 @@ const ProductDetailModify = () => {
               >
                 Delete Product
               </Button>
-              </div>
-              <br/><br/>
+
+                </div>
+
+                </div>
+              </CardContent>
+              {/* marginTop:'100px', */}
+              <div style={{marginLeft:'35px'}}>
+
+              <Button
+                className='button-31'
+                variant="contained"
+                color="primary"
+                onClick={() => setOpenStock(true)}
+                style={{
+                  backgroundColor: '#35bd50',
+                  color: 'white',
+                  top: '5px',
+                  right: '20px'
+                }}
+                disabled={quantity <= 0}
+                classes={{
+                  root: 'button-root',
+                  disabled: 'page-buttons',
+                }}
+              >
+                Update Stock
+              </Button>
+
+              <Link to={`/updateinformation/${productId}`} className='cardClass link-no-underline'>
+              <Button
+                  className='button-31'
+                  variant="contained"
+                  color="primary"
+                  style={{
+                    backgroundColor: '#222',
+                    color: 'white',
+                    top: '15px',
+                    right: '20px'
+                  }}
+                  classes={{
+                    root: 'button-root',
+                    disabled: 'page-buttons',
+                  }}
+                >
+                  Update product details
+                </Button>
+                </Link>
+
+                </div>
+                <br/><br/><br/>
             </Card>
             <React.Fragment>
-      <Modal open={open} onClose={() => setOpen(false)}>
+              <Modal open={open} onClose={() => setOpen(false)}>
+                <ModalDialog
+                  variant="outlined"
+                  role="alertdialog"
+                  aria-labelledby="alert-dialog-modal-title"
+                  aria-describedby="alert-dialog-modal-description"
+                >
+                  <Typography
+                    id="alert-dialog-modal-title"
+                    level="h2"
+                    startdecorator={<WarningRoundedIcon />}
+                  >
+                    Confirmation
+                  </Typography>
+                  <Divider />
+                  <Typography id="alert-dialog-modal-description" textcolor="text.tertiary">
+                    Are you sure you want to delete this product?
+                  </Typography>
+                  <br/>
+
+                  <TextField
+          label="Type 'DELETE' to confirm"
+          variant="outlined"
+          fullWidth
+          value={deleteInput}
+          onChange={handleInputChange}
+        />
+        <Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end', pt: 2 }}>
+          <Button variant="plain" color="neutral" onClick={handleCloseModal}>
+            Cancel
+          </Button>
+          <Button
+            variant="solid"
+            color="danger"
+            onClick={handleDeleteProduct}
+            disabled={!isDeleteInputValid}
+          >
+            Delete product
+          </Button>
+        </Box>
+
+                  {/* <Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end', pt: 2 }}>
+                    <Button variant="plain" color="neutral" onClick={() => setOpen(false)}>
+                      Cancel
+                    </Button>
+                    <Button variant="solid" color="danger" onClick={handleDeleteProduct}>
+                      Delete product
+                    </Button>
+                  </Box> */}
+                </ModalDialog>
+              </Modal>
+
+              {/* <Modal open={open} onClose={handleCloseModal}>
+      <div>
+        <Typography variant="h2" startIcon={<WarningRoundedIcon />}>
+          Confirmation
+        </Typography>
+        <Divider />
+        <Typography color="text.tertiary">
+          Are you sure you want to delete this product?
+        </Typography>
+        <TextField
+          label="Type 'DELETE' to confirm"
+          variant="outlined"
+          fullWidth
+          value={deleteInput}
+          onChange={handleInputChange}
+        />
+        <Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end', pt: 2 }}>
+          <Button variant="plain" color="neutral" onClick={handleCloseModal}>
+            Cancel
+          </Button>
+          <Button
+            variant="solid"
+            color="danger"
+            onClick={handleDeleteProduct}
+            disabled={!isDeleteInputValid}
+          >
+            Delete product
+          </Button>
+        </Box>
+      </div>
+    </Modal> */}
+      </React.Fragment>
+
+
+      {/* START */}
+
+      <React.Fragment>
+      <Modal open={openStock} onClose={() => setOpenStock(false)}>
         <ModalDialog
           variant="outlined"
           role="alertdialog"
@@ -222,19 +366,21 @@ const ProductDetailModify = () => {
           </Typography>
           <Divider />
           <Typography id="alert-dialog-modal-description" textcolor="text.tertiary">
-            Are you sure you want to delete this product?
+          Are you certain you'd like to increase your product's stock quantity by <span style={{color: '#4CAF50'}}>{quantity} units</span>?
           </Typography>
           <Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end', pt: 2 }}>
-            <Button variant="plain" color="neutral" onClick={() => setOpen(false)}>
+            <Button variant="plain" color="neutral" onClick={() => setOpenStock(false)}>
               Cancel
             </Button>
-            <Button variant="solid" color="danger" onClick={handleDeleteProduct}>
-              Delete product
+            <Button variant="solid" color="success" onClick={handelStockUpdateProduct}>
+              Update Stock
             </Button>
           </Box>
         </ModalDialog>
       </Modal>
       </React.Fragment>
+
+      {/* END */}
           </Grid>
         </Grid>
       ) : (

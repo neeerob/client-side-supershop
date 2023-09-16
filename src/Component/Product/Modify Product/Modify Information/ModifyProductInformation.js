@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import axios from 'axios';
@@ -11,16 +11,46 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import './AddProduct.css';
+import { useParams } from 'react-router-dom';
 
-const AddProduct = () => {
+const ModifyProductInformation = () => {
+  const { productId } = useParams();
+  const [productData, setProductData] = useState(null);
+
+  useEffect(() => {
+    const apiUrl = `http://localhost:5000/product/${productId}`;
+    axios
+      .get(apiUrl)
+      .then((response) => {
+        setProductData(response.data.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching product data:', error);
+      });
+  }, [productId]);
+
+  // Initialize the product state with default values or empty values
   const [product, setProduct] = useState({
     productName: '',
     description: '',
     image: '',
-    price: '',
+    price: 0,
     quantity: 0,
-    isActive: 'true', 
+    isActive: 'true',
   });
+
+  // Populate the product state when productData is available
+  useEffect(() => {
+    if (productData) {
+      setProduct({
+        productName: productData.productName || '',
+        description: productData.description || '',
+        image: productData.image || '',
+        price: productData.price || 0,
+        isActive: productData.isActive || 'false',
+      });
+    }
+  }, [productData]);
 
   const [openModal, setOpenModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
@@ -36,29 +66,22 @@ const AddProduct = () => {
     e.preventDefault();
 
     try {
-      const apiUrl = `http://localhost:5000/product/add/${product.quantity}`;
-      console.log(product);
-
+      const apiUrl = `http://localhost:5000/product/update/${productId}`;
       const response = await axios.post(apiUrl, product);
-      console.log('Product added:', response.data);
+      console.log(product);
+      console.log(response);
 
-      setProduct({
-        productName: '',
-        description: '',
-        image: '',
-        price: '',
-        quantity: 0,
-        isActive: 'true',
-      });
-
-      setModalMessage('Product added successfully!');
+      setModalMessage('Product Updated successfully!');
       setModalColor('#4CAF50');
       setModalMainMsg('Success');
       setOpenModal(true);
+      setTimeout(() => {
+        window.location.href = `../productModify/${productId}`;
+      }, 500); 
     } catch (error) {
-      console.error('Error adding product:', error);
+      console.error('Error updating product:', error);
 
-      setModalMessage('Error adding product. Please try again.');
+      setModalMessage('Error updating product. Please try again.');
       setModalColor('#F44336');
       setModalMainMsg('Error');
       setOpenModal(true);
@@ -82,20 +105,6 @@ const AddProduct = () => {
           onChange={handleChange}
           required
         />
-      
-
-        <TextField
-          name="price"
-          label="Price"
-          type="number"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          value={product.price}
-          onChange={handleChange}
-          required
-        />
-
         <TextField
           name="description"
           label="Description"
@@ -110,13 +119,13 @@ const AddProduct = () => {
         />
 
         <TextField
-          name="quantity"
-          label="Product Quantity"
+          name="price"
+          label="Price"
           type="number"
           variant="outlined"
           fullWidth
           margin="normal"
-          value={product.quantity}
+          value={product.price}
           onChange={handleChange}
           required
         />
@@ -144,6 +153,7 @@ const AddProduct = () => {
           />
         </RadioGroup>
 
+
         <TextField
           name="image"
           label="Image"
@@ -155,22 +165,22 @@ const AddProduct = () => {
           required
         />
 
-{product.image && (
-  <div style={{ textAlign: 'center', marginTop: '20px' }}>
-    <img
-      src={product.image}
-      alt="Product"
-      style={{
-        maxWidth: '100%',
-        maxHeight: '200px',
-        border: '1px solid #ccc',
-        borderRadius: '4px',
-        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-      }}
-    />
-  </div>
-)}
-
+        {product.image && (
+          <div style={{ textAlign: 'center', marginTop: '20px' }}>
+            <img
+              src={product.image}
+              alt="Product"
+              style={{
+                maxWidth: '100%',
+                maxHeight: '200px',
+                border: '1px solid #ccc',
+                borderRadius: '4px',
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+              }}
+            />
+          </div>
+        )}
+        
         <br />
 
         <Button
@@ -180,7 +190,7 @@ const AddProduct = () => {
           className="button-31"
           style={{ backgroundColor: '#222', color: '#fff' }}
         >
-          Add Product
+          Modify Product Information
         </Button>
 
         <Modal
@@ -208,7 +218,7 @@ const AddProduct = () => {
               {modalMainMsg}
             </Typography>
             <Divider />
-            <br></br>
+            <br />
             <Typography variant="body1" sx={{ color: 'text.secondary' }}>
               {modalMessage}
             </Typography>
@@ -224,4 +234,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default ModifyProductInformation;

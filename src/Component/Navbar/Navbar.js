@@ -1,7 +1,20 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import '../Navbar/Navbar.css'; 
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 function Navbar() {
+  const [sales, setSales] = useState([]);
+  
+  useEffect(() => {
+    // Retrieve the existing sales data from local storage
+    const storedSales = JSON.parse(localStorage.getItem('sales')) || [];
+    setSales(storedSales);
+  }, []);
+
+  const countSales = () => {
+    return sales.length;
+  };
+
   return (
     <header className="navbar">
       <div className="container">
@@ -16,19 +29,13 @@ function Navbar() {
 
 
           <ul className="navbar-nav">
-            {/* <li>
-              <a href="/">Home</a>
-            </li>
-            <li>
-              <a href="/about">About</a>
-            </li>
-            <li>
-              <a href="/services">Services</a>
-            </li> */}
-            <li>
-              <a href="/contact">Cart</a>
-            </li>
-          </ul>
+        <li>
+          <a href="/cart">
+            <ShoppingCartIcon />
+            <span>{countSales()}</span>
+          </a>
+        </li>
+      </ul>
         </div>
       </div>
     </header>

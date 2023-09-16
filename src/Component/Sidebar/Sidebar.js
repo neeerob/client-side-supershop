@@ -12,12 +12,12 @@ function Sidebar() {
             <ul className="something">
                 <li>
                     <a href="../">
-                    {currentPage === "/" ? (
+                    {(currentPage === "/") ? (
                         <i className="fa fa-home fa-2x active"></i>
                     ) : (
                         <i className="fa fa-home fa-2x"></i>
                     )}
-                    <span className="nav-text">Home/Dashboard</span>
+                    <span className="nav-text">All products</span>
                     </a>
                 </li>
 
@@ -34,7 +34,7 @@ function Sidebar() {
 
                 <li>
                     <a href="/modify">
-                    {currentPage === "/modify" ? (
+                    {currentPage === "/modify" || currentPage === "../productdetails" ? (
                         <i className="fa fa-cogs fa-2x active"></i>
                     ) : (
                         <i className="fa fa-cogs fa-2x"></i>
