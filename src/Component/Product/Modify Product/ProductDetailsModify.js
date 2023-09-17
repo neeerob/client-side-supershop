@@ -300,50 +300,9 @@ const ProductDetailModify = () => {
           >
             Delete product
           </Button>
-        </Box>
-
-                  {/* <Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end', pt: 2 }}>
-                    <Button variant="plain" color="neutral" onClick={() => setOpen(false)}>
-                      Cancel
-                    </Button>
-                    <Button variant="solid" color="danger" onClick={handleDeleteProduct}>
-                      Delete product
-                    </Button>
-                  </Box> */}
+        </Box>  
                 </ModalDialog>
               </Modal>
-
-              {/* <Modal open={open} onClose={handleCloseModal}>
-      <div>
-        <Typography variant="h2" startIcon={<WarningRoundedIcon />}>
-          Confirmation
-        </Typography>
-        <Divider />
-        <Typography color="text.tertiary">
-          Are you sure you want to delete this product?
-        </Typography>
-        <TextField
-          label="Type 'DELETE' to confirm"
-          variant="outlined"
-          fullWidth
-          value={deleteInput}
-          onChange={handleInputChange}
-        />
-        <Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end', pt: 2 }}>
-          <Button variant="plain" color="neutral" onClick={handleCloseModal}>
-            Cancel
-          </Button>
-          <Button
-            variant="solid"
-            color="danger"
-            onClick={handleDeleteProduct}
-            disabled={!isDeleteInputValid}
-          >
-            Delete product
-          </Button>
-        </Box>
-      </div>
-    </Modal> */}
       </React.Fragment>
 
 
