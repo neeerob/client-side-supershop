@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import ProductCard from './ProductCard';
-import './ProductCard.css';
+import React, { useState, useEffect } from "react";
+import ProductCard from "./ProductCard";
+import "./ProductCard.css";
 
 const ProductCardContainer = ({ products, onDeleteProduct }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 4;
+  const productsPerPage = 5;
   const maxVisiblePages = 5; // Change this to adjust the number of visible pages
 
   const startIndex = (currentPage - 1) * productsPerPage;
@@ -52,7 +52,7 @@ const ProductCardContainer = ({ products, onDeleteProduct }) => {
             <button
               key={page}
               onClick={() => handlePageChange(page)}
-              className={currentPage === page ? 'active' : '' }
+              className={currentPage === page ? "active" : ""}
             >
               {page}
             </button>

@@ -10,6 +10,10 @@ import {
   Button,
   TextField,
 } from "@mui/material";
+import {
+  AddCircleOutline as AddIcon,
+  RemoveCircleOutline as RemoveIcon,
+} from "@mui/icons-material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import CancelIcon from "@mui/icons-material/Cancel";
 import Modal from "@mui/joy/Modal";
@@ -35,6 +39,12 @@ function Cart() {
     (total, sale) => total + sale.quantitySold,
     0
   );
+
+  const totalQuantityOriginal = sales.reduce(
+    (total, sale) => total + sale.originalQuantity,
+    0
+  );
+
   const totalPrice = sales.reduce(
     (total, sale) => total + sale.salePrice * sale.quantitySold,
     0
@@ -68,17 +78,7 @@ function Cart() {
 
   const handleDeleteProduct = async () => {
     try {
-      sales.map(async (individualSaleID) => {
-        // try {
-        //   const data = await axios.delete(
-        //     `http://localhost:5000/sales/deleteSale/${individualSaleID.saleId}`
-        //   );
-        //   console.log(data.data);
-        // } catch (error) {
-        //   console.error("Error deleting product:", error);
-        //   alert("Error deleting product!");
-        // }
-      });
+      sales.map(async (individualSaleID) => {});
       setOpen(false);
       alert("Succcessfully emptyed cart.");
       localStorage.setItem("sales", JSON.stringify([]));
@@ -107,53 +107,23 @@ function Cart() {
 
     localStorage.setItem("sales", JSON.stringify(updatedSales));
     localStorage.setItem("salesPush", JSON.stringify(updatedSalesPush));
+  };
 
-    // try {
-    //   const data = await axios.delete(
-    //     `http://localhost:5000/sales/deleteSale/${needToDeleteSaleID}`
-    //   );
-    //   alert("Successfully deleted!");
-    // } catch (error) {
-    //   console.error("Error deleting product:", error);
-    //   alert("Error deleting product!");
-    // }
+  const updateQuantity = (saleId, newQuantity) => {
+    const updatedSales = sales.map((sale) => {
+      if (sale.saleId === saleId) {
+        sale.quantitySold = newQuantity;
+      }
+      return sale;
+    });
+
+    setSales(updatedSales);
+
+    localStorage.setItem("sales", JSON.stringify(updatedSales));
   };
 
   const handelConfirm = async () => {
     try {
-      // const creatingReceipt = await axios.post(
-      //   `http://localhost:5000/receipt/crtrct`,
-      //   salesPush
-      // );
-      // var salesIdPush = [];
-      // sales.map(async (getIndividualOrder) => {
-      //   const dataPush = {
-      //     productId: getIndividualOrder.productId,
-      //     quantitySold: getIndividualOrder.quantitySold,
-      //     salePrice: getIndividualOrder.salePrice,
-      //   };
-      //   const apiUrlPush = `http://localhost:5000/sales/registerSales/${getIndividualOrder.discount}`;
-      //   try {
-      //     const response = await axios.post(apiUrlPush, dataPush);
-      //     const saleIdsArrayOfObject = {
-      //       saleId: response.data.data._id,
-      //     };
-      //     salesIdPush = [...salesIdPush, saleIdsArrayOfObject];
-      //     setsalesIdNeedToPush(salesIdPush);
-      //   } catch (err) {
-      //     console.error(err);
-      //     alert("SOMETHING WRONG");
-      //   }
-      // });
-      // console.log(salesIdPush);
-      // console.log(salesIdPush);
-      // console.log("?");
-      // alert("Succcessfully checked out!");
-      // localStorage.setItem("sales", JSON.stringify([]));
-      // localStorage.setItem("salesPush", JSON.stringify([]));
-      // setSales([]);
-      // setSalesPush([]);
-
       var salesIdPush = [];
       const postRequests = sales.map(async (getIndividualOrder) => {
         const dataPush = {
@@ -184,11 +154,14 @@ function Cart() {
             );
             setOpen1(false);
             console.log(creatingReceipt.data);
-            alert("Succcessfully checked out!");
             localStorage.setItem("sales", JSON.stringify([]));
             localStorage.setItem("salesPush", JSON.stringify([]));
             setSales([]);
             setSalesPush([]);
+            alert(
+              "Success: Receipt Number: " +
+                creatingReceipt.data.data.receiptNumber
+            );
           } catch (error) {
             alert("SOMETHING WRONG");
             console.log(error);
@@ -215,7 +188,7 @@ function Cart() {
                 style={{
                   display: "flex",
                   marginBottom: "16px",
-                  position: "relative", // Add position relative to the card
+                  position: "relative",
                 }}
               >
                 <Button
@@ -252,12 +225,116 @@ function Cart() {
                   <Typography variant="h6" gutterBottom>
                     {sale.productName}
                   </Typography>
-
-                  <Typography variant="body2" color="text.secondary" paragraph>
+                  {/* <Typography variant="body2" color="text.secondary" paragraph>
                     Quantity: {sale.quantitySold}
                   </Typography>
+                  <Button
+                    onClick={() =>
+                      updateQuantity(sale.saleId, sale.quantitySold + 1)
+                    }
+                  >
+                    Increase Quantity
+                  </Button>
+                  <Button
+                    onClick={() =>
+                      updateQuantity(sale.saleId, sale.quantitySold - 1)
+                    }
+                  >
+                    Decrease Quantity
+                  </Button> */}
+                  {/* Original */}
+                  {/* <Typography variant="body2" color="text.secondary" paragraph>
+                    Quantity:
+                    <Button
+                      onClick={() =>
+                        updateQuantity(sale.saleId, sale.quantitySold - 1)
+                      }
+                      disabled={sale.quantitySold <= 1}
+                    >
+                      <RemoveIcon />
+                    </Button>
+                    {sale.quantitySold}
+                    <Button
+                      onClick={() =>
+                        updateQuantity(sale.saleId, sale.quantitySold + 1)
+                      }
+                      disabled={sale.originalQuantity < sale.quantitySold}
+                    >
+                      <AddIcon />
+                    </Button>
+                  </Typography> */}
+                  {/* End original */}
                   <Typography variant="body2" color="text.secondary" paragraph>
-                    SaleId: {sale.saleId}
+                    Quantity:
+                    <Button
+                      onClick={() =>
+                        updateQuantity(sale.saleId, sale.quantitySold - 1)
+                      }
+                      disabled={sale.quantitySold <= 1}
+                      size="small" // Add size="small" to make the button smaller
+                    >
+                      <RemoveIcon fontSize="small" />{" "}
+                      {/* Add fontSize="small" */}
+                    </Button>
+                    <TextField
+                      type="number"
+                      value={sale.quantitySold}
+                      InputProps={{
+                        inputProps: {
+                          min: 1,
+                          style: { width: "40px" }, // Adjust the width here
+                        },
+                      }}
+                      onChange={(e) =>
+                        updateQuantity(sale.saleId, parseInt(e.target.value))
+                      }
+                      size="small" // Add size="small" to make the input smaller
+                    />
+                    <Button
+                      onClick={() =>
+                        updateQuantity(sale.saleId, sale.quantitySold + 1)
+                      }
+                      disabled={sale.originalQuantity < sale.quantitySold}
+                      size="small" // Add size="small" to make the button smaller
+                    >
+                      <AddIcon fontSize="small" /> {/* Add fontSize="small" */}
+                    </Button>
+                  </Typography>
+                  {/* <Typography variant="body2" color="text.secondary" paragraph>
+                    Quantity:{" "}
+                    <Button
+                      onClick={() =>
+                        updateQuantity(sale.saleId, sale.quantitySold - 1)
+                      }
+                      disabled={sale.quantitySold <= 1}
+                    >
+                      <RemoveIcon />
+                    </Button>
+                    <TextField
+                      type="number"
+                      value={sale.quantitySold}
+                      InputProps={{ inputProps: { min: 1 } }}
+                      onChange={(e) =>
+                        updateQuantity(sale.saleId, parseInt(e.target.value))
+                      }
+                    />
+                    <Button
+                      onClick={() =>
+                        updateQuantity(sale.saleId, sale.quantitySold + 1)
+                      }
+                    >
+                      <AddIcon />
+                    </Button>
+                  </Typography> */}
+
+                  {/* start */}
+
+                  {/* End */}
+                  <Typography variant="body2" color="text.secondary" paragraph>
+                    Total quantity: {sale.originalQuantity}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" paragraph>
+                    Product ID: {sale.productId}
                   </Typography>
                   <Typography variant="body2" color="text.secondary" paragraph>
                     {sale.description}
@@ -308,6 +385,7 @@ function Cart() {
                 endIcon={<ShoppingCartIcon />}
                 style={{ marginTop: "16px", float: "right" }}
                 onClick={() => setOpen1(true)}
+                disabled={totalQuantity > totalQuantityOriginal}
               >
                 Checkout
               </Button>
