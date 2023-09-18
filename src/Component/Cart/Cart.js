@@ -27,6 +27,7 @@ function Cart() {
   const [sales, setSales] = useState([]);
   const [salesPush, setSalesPush] = useState([]);
   const [salesIdNeedToPush, setsalesIdNeedToPush] = useState([]);
+  const [flagCheck, setFlagCheck] = useState([]);
 
   useEffect(() => {
     const storedSales = JSON.parse(localStorage.getItem("sales")) || [];
@@ -109,15 +110,74 @@ function Cart() {
     localStorage.setItem("salesPush", JSON.stringify(updatedSalesPush));
   };
 
+  // const updateQuantity = (saleId, newQuantity) => {
+  //   const updatedSales = sales.map((sale) => {
+  //     if (sale.saleId === saleId) {
+  //       sale.quantitySold = newQuantity;
+  //     }
+  //     return sale;
+  //   });
+
+  //   setSales(updatedSales);
+
+  //   localStorage.setItem("sales", JSON.stringify(updatedSales));
+  // };
+
+  // const updateQuantity = (saleId, newQuantity) => {
+  //   const updatedSales = sales.map((sale) => {
+  //     if (sale.productId === saleId) {
+  //       if (sale.originalQuantity >= newQuantity) {
+  //         setFlagCheck(true);
+  //         return { ...sale, quantitySold: newQuantity };
+  //       } else {
+  //         setFlagCheck(false);
+  //         return { ...sale, quantitySold: newQuantity };
+  //       }
+  //     }
+  //     return sale;
+  //   });
+
+  //   setSales(updatedSales);
+
+  //   localStorage.setItem("sales", JSON.stringify(updatedSales));
+  // };
+
+  // const updateQuantity = (saleId, newQuantity) => {
+  //   let allProductsValid = true;
+
+  //   const updatedSales = sales.map((sale) => {
+  //     if (sale.productId === saleId) {
+  //       if (sale.originalQuantity >= newQuantity) {
+  //         return { ...sale, quantitySold: newQuantity };
+  //       } else {
+  //         allProductsValid = false;
+  //         return { ...sale, quantitySold: newQuantity };
+  //       }
+  //     }
+  //     return sale;
+  //   });
+
+  //   setSales(updatedSales);
+  //   setFlagCheck(allProductsValid);
+
+  //   localStorage.setItem("sales", JSON.stringify(updatedSales));
+  // };
+
   const updateQuantity = (saleId, newQuantity) => {
     const updatedSales = sales.map((sale) => {
-      if (sale.saleId === saleId) {
-        sale.quantitySold = newQuantity;
+      if (sale.productId === saleId) {
+        return { ...sale, quantitySold: newQuantity };
       }
       return sale;
     });
 
+    const allProductsValid = updatedSales.every(
+      (sale) => sale.originalQuantity >= sale.quantitySold
+    );
+    console.log(!allProductsValid);
+
     setSales(updatedSales);
+    setFlagCheck(allProductsValid);
 
     localStorage.setItem("sales", JSON.stringify(updatedSales));
   };
@@ -153,7 +213,7 @@ function Cart() {
               salesIdPush
             );
             setOpen1(false);
-            console.log(creatingReceipt.data);
+            console.log(creatingReceipt.data.data);
             localStorage.setItem("sales", JSON.stringify([]));
             localStorage.setItem("salesPush", JSON.stringify([]));
             setSales([]);
@@ -162,6 +222,9 @@ function Cart() {
               "Success: Receipt Number: " +
                 creatingReceipt.data.data.receiptNumber
             );
+            setTimeout(() => {
+              window.location.href = `/`;
+            }, 500);
           } catch (error) {
             alert("SOMETHING WRONG");
             console.log(error);
@@ -225,56 +288,16 @@ function Cart() {
                   <Typography variant="h6" gutterBottom>
                     {sale.productName}
                   </Typography>
-                  {/* <Typography variant="body2" color="text.secondary" paragraph>
-                    Quantity: {sale.quantitySold}
-                  </Typography>
-                  <Button
-                    onClick={() =>
-                      updateQuantity(sale.saleId, sale.quantitySold + 1)
-                    }
-                  >
-                    Increase Quantity
-                  </Button>
-                  <Button
-                    onClick={() =>
-                      updateQuantity(sale.saleId, sale.quantitySold - 1)
-                    }
-                  >
-                    Decrease Quantity
-                  </Button> */}
-                  {/* Original */}
-                  {/* <Typography variant="body2" color="text.secondary" paragraph>
-                    Quantity:
-                    <Button
-                      onClick={() =>
-                        updateQuantity(sale.saleId, sale.quantitySold - 1)
-                      }
-                      disabled={sale.quantitySold <= 1}
-                    >
-                      <RemoveIcon />
-                    </Button>
-                    {sale.quantitySold}
-                    <Button
-                      onClick={() =>
-                        updateQuantity(sale.saleId, sale.quantitySold + 1)
-                      }
-                      disabled={sale.originalQuantity < sale.quantitySold}
-                    >
-                      <AddIcon />
-                    </Button>
-                  </Typography> */}
-                  {/* End original */}
                   <Typography variant="body2" color="text.secondary" paragraph>
                     Quantity:
                     <Button
                       onClick={() =>
-                        updateQuantity(sale.saleId, sale.quantitySold - 1)
+                        updateQuantity(sale.productId, sale.quantitySold - 1)
                       }
                       disabled={sale.quantitySold <= 1}
                       size="small" // Add size="small" to make the button smaller
                     >
                       <RemoveIcon fontSize="small" />{" "}
-                      {/* Add fontSize="small" */}
                     </Button>
                     <TextField
                       type="number"
@@ -286,50 +309,20 @@ function Cart() {
                         },
                       }}
                       onChange={(e) =>
-                        updateQuantity(sale.saleId, parseInt(e.target.value))
+                        updateQuantity(sale.productId, parseInt(e.target.value))
                       }
                       size="small" // Add size="small" to make the input smaller
                     />
                     <Button
                       onClick={() =>
-                        updateQuantity(sale.saleId, sale.quantitySold + 1)
+                        updateQuantity(sale.productId, sale.quantitySold + 1)
                       }
                       disabled={sale.originalQuantity < sale.quantitySold}
                       size="small" // Add size="small" to make the button smaller
                     >
-                      <AddIcon fontSize="small" /> {/* Add fontSize="small" */}
+                      <AddIcon fontSize="small" />
                     </Button>
                   </Typography>
-                  {/* <Typography variant="body2" color="text.secondary" paragraph>
-                    Quantity:{" "}
-                    <Button
-                      onClick={() =>
-                        updateQuantity(sale.saleId, sale.quantitySold - 1)
-                      }
-                      disabled={sale.quantitySold <= 1}
-                    >
-                      <RemoveIcon />
-                    </Button>
-                    <TextField
-                      type="number"
-                      value={sale.quantitySold}
-                      InputProps={{ inputProps: { min: 1 } }}
-                      onChange={(e) =>
-                        updateQuantity(sale.saleId, parseInt(e.target.value))
-                      }
-                    />
-                    <Button
-                      onClick={() =>
-                        updateQuantity(sale.saleId, sale.quantitySold + 1)
-                      }
-                    >
-                      <AddIcon />
-                    </Button>
-                  </Typography> */}
-
-                  {/* start */}
-
-                  {/* End */}
                   <Typography variant="body2" color="text.secondary" paragraph>
                     Total quantity: {sale.originalQuantity}
                   </Typography>
@@ -384,8 +377,14 @@ function Cart() {
                 // onClick={handelConfirmProduct}
                 endIcon={<ShoppingCartIcon />}
                 style={{ marginTop: "16px", float: "right" }}
-                onClick={() => setOpen1(true)}
-                disabled={totalQuantity > totalQuantityOriginal}
+                // onClick={() => setOpen1(true)}
+                // disabled={totalQuantity > totalQuantityOriginal}
+                onClick={() => {
+                  if (flagCheck) {
+                    setOpen1(true);
+                  }
+                }}
+                disabled={!flagCheck}
               >
                 Checkout
               </Button>

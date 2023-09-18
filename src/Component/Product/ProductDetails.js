@@ -93,9 +93,9 @@ const ProductDetail = () => {
         setNewSaleId("");
 
         alert("Successfully sold product");
-        // setTimeout(() => {
-        //   window.location.href = `/`;
-        // }, 500);
+        setTimeout(() => {
+          window.location.href = `/`;
+        }, 500);
       } else {
         alert("Please enter sale price and discount amount");
       }
