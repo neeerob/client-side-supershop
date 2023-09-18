@@ -201,7 +201,7 @@ function Cart() {
           setsalesIdNeedToPush(salesIdPush);
         } catch (err) {
           console.error(err);
-          alert("SOMETHING WRONG");
+          alert("SOMETHING WRONG2");
         }
       });
 
@@ -218,15 +218,14 @@ function Cart() {
             localStorage.setItem("salesPush", JSON.stringify([]));
             setSales([]);
             setSalesPush([]);
-            alert(
-              "Success: Receipt Number: " +
-                creatingReceipt.data.data.receiptNumber
-            );
-            setTimeout(() => {
-              window.location.href = `/`;
-            }, 500);
+            // alert(
+            //   "Success: Receipt Number: " +
+            //     creatingReceipt.data.data.receiptNumber
+            // );
+
+            window.location.href = `/cart/checkoutinfo/${creatingReceipt.data.data.receiptNumber}`;
           } catch (error) {
-            alert("SOMETHING WRONG");
+            alert("SOMETHING WRONG1");
             console.log(error);
           }
         })
