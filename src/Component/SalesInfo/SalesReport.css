@@ -1,0 +1,43 @@
+/* BeautifulInfo.css */
+
+.info-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px #007bff;
+    background-color: #ffffff;
+}
+
+.info-item {
+    text-align: right;
+    margin: 5px;
+}
+
+.profit {
+    color: #28a745;
+    /* Green color for profit */
+    font-weight: bold;
+}
+/* TextAlignment.css */
+
+.text-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    background-color: #f0f0f0;
+    padding: 10px;
+}
+
+.text-left,
+.text-right {
+    flex: 1;
+}
+
+.text-center {
+    flex: 2;
+    text-align: center;
+}

@@ -93,75 +93,17 @@ function Cart() {
   };
 
   const handelDeleteIndividualProduct = async (needToDeleteSaleID) => {
+    console.log(needToDeleteSaleID);
     const updatedSales = sales.filter(
-      (sale) => !needToDeleteSaleID.includes(sale.saleId)
-    );
-    const updatedSalesPush = salesPush.filter(
-      (sale) => !needToDeleteSaleID.includes(sale.saleId)
+      (sale) => !needToDeleteSaleID.includes(sale.productId)
     );
 
     console.log(updatedSales);
-    console.log(updatedSalesPush);
 
     setSales(updatedSales);
-    setSalesPush(updatedSalesPush);
 
     localStorage.setItem("sales", JSON.stringify(updatedSales));
-    localStorage.setItem("salesPush", JSON.stringify(updatedSalesPush));
   };
-
-  // const updateQuantity = (saleId, newQuantity) => {
-  //   const updatedSales = sales.map((sale) => {
-  //     if (sale.saleId === saleId) {
-  //       sale.quantitySold = newQuantity;
-  //     }
-  //     return sale;
-  //   });
-
-  //   setSales(updatedSales);
-
-  //   localStorage.setItem("sales", JSON.stringify(updatedSales));
-  // };
-
-  // const updateQuantity = (saleId, newQuantity) => {
-  //   const updatedSales = sales.map((sale) => {
-  //     if (sale.productId === saleId) {
-  //       if (sale.originalQuantity >= newQuantity) {
-  //         setFlagCheck(true);
-  //         return { ...sale, quantitySold: newQuantity };
-  //       } else {
-  //         setFlagCheck(false);
-  //         return { ...sale, quantitySold: newQuantity };
-  //       }
-  //     }
-  //     return sale;
-  //   });
-
-  //   setSales(updatedSales);
-
-  //   localStorage.setItem("sales", JSON.stringify(updatedSales));
-  // };
-
-  // const updateQuantity = (saleId, newQuantity) => {
-  //   let allProductsValid = true;
-
-  //   const updatedSales = sales.map((sale) => {
-  //     if (sale.productId === saleId) {
-  //       if (sale.originalQuantity >= newQuantity) {
-  //         return { ...sale, quantitySold: newQuantity };
-  //       } else {
-  //         allProductsValid = false;
-  //         return { ...sale, quantitySold: newQuantity };
-  //       }
-  //     }
-  //     return sale;
-  //   });
-
-  //   setSales(updatedSales);
-  //   setFlagCheck(allProductsValid);
-
-  //   localStorage.setItem("sales", JSON.stringify(updatedSales));
-  // };
 
   const updateQuantity = (saleId, newQuantity) => {
     const updatedSales = sales.map((sale) => {
@@ -256,7 +198,7 @@ function Cart() {
                 <Button
                   variant="outlined"
                   color="error"
-                  onClick={() => handelDeleteIndividualProduct(sale.saleId)}
+                  onClick={() => handelDeleteIndividualProduct(sale.productId)}
                   style={{
                     position: "absolute",
                     top: "8px",

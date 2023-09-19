@@ -80,16 +80,39 @@ function Sidebar() {
                         </span>
                     </a>
                 </li> */}
-
           <li>
+            <a href="/salesinfo">
+              {currentPage === "/salesinfo" ||
+              currentPage === "../salesinfo" ? (
+                <i className="fa fa-info fa-2x active"></i>
+              ) : (
+                <i className="fa fa-info fa-2x"></i>
+              )}
+              <span className="nav-text">Sale account information</span>
+            </a>
+          </li>
+
+          {/* <li>
             <a href="#">
               <i className="fa fa-info fa-2x"></i>
               <span className="nav-text">Stock information</span>
             </a>
-          </li>
-          <li>
-            <a href="#">
+          </li> */}
+
+          {/* <li>
+            <a href="/return">
               <i className="fa fa-power-off fa-2x"></i>
+              <span className="nav-text">Logout</span>
+            </a>
+          </li> */}
+
+          <li>
+            <a href="/return">
+              {currentPage === "/return" ? (
+                <i className="fa fa-minus fa-2x active"></i>
+              ) : (
+                <i className="fa fa-minus fa-2x"></i>
+              )}
               <span className="nav-text">Logout</span>
             </a>
           </li>

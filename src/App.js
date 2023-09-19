@@ -10,6 +10,8 @@ import ModifyProductInformation from "./Component/Product/Modify Product/Modify 
 import Cart from "./Component/Cart/Cart";
 import Receipt from "./Component/Receipt/Receipt";
 import CheckoutInfo from "./Component/Checkout/Checkout";
+import SalesPieChart from "./Component/SalesInfo/SalesInfo";
+import ReturnReceipt from "./Component/Receipt/returnReceipt";
 
 function App() {
   return (
@@ -30,6 +32,8 @@ function App() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/receipt" element={<Receipt />} />
         <Route path="/cart/checkoutinfo/:id" element={<CheckoutInfo />} />
+        <Route path="/salesinfo" element={<SalesPieChart />} />
+        <Route path="/return" element={<ReturnReceipt />} />
       </Route>
     </Routes>
   );
