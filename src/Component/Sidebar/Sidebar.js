@@ -116,6 +116,17 @@ function Sidebar() {
               <span className="nav-text">Return Receip</span>
             </a>
           </li>
+
+          <li>
+            <a href="/report">
+              {currentPage === "/report" ? (
+                <i className="fa fa-file-text-o fa-2x active"></i>
+              ) : (
+                <i className="fa fa-file-text-o fa-2x"></i>
+              )}
+              <span className="nav-text">Sales Report</span>
+            </a>
+          </li>
         </ul>
       </nav>
     </>
