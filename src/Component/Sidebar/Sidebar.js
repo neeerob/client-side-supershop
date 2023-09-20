@@ -61,7 +61,7 @@ function Sidebar() {
               ) : (
                 <i className="fa fa-book fa-2x"></i>
               )}
-              <span className="nav-text">Receopt's imformation</span>
+              <span className="nav-text">Receipt's imformation</span>
             </a>
           </li>
 
@@ -84,9 +84,9 @@ function Sidebar() {
             <a href="/salesinfo">
               {currentPage === "/salesinfo" ||
               currentPage === "../salesinfo" ? (
-                <i className="fa fa-info fa-2x active"></i>
+                <i className="fa fa-money fa-2x active"></i>
               ) : (
-                <i className="fa fa-info fa-2x"></i>
+                <i className="fa fa-money fa-2x"></i>
               )}
               <span className="nav-text">Sale account information</span>
             </a>
@@ -109,11 +109,11 @@ function Sidebar() {
           <li>
             <a href="/return">
               {currentPage === "/return" ? (
-                <i className="fa fa-minus fa-2x active"></i>
+                <i className="fa fa-repeat fa-2x active"></i>
               ) : (
-                <i className="fa fa-minus fa-2x"></i>
+                <i className="fa fa-repeat fa-2x"></i>
               )}
-              <span className="nav-text">Logout</span>
+              <span className="nav-text">Return Receip</span>
             </a>
           </li>
         </ul>

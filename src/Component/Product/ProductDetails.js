@@ -12,6 +12,7 @@ import ModalDialog from "@mui/joy/ModalDialog";
 import WarningRoundedIcon from "@mui/icons-material/WarningRounded";
 import Button from "@mui/joy/Button";
 import { useLocation } from "react-router-dom";
+import Swal from "sweetalert2";
 
 import {
   Card,
@@ -92,7 +93,15 @@ const ProductDetail = () => {
 
         setNewSaleId("");
 
-        alert("Successfully sold product");
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Successfully sold product",
+          showConfirmButton: false,
+          timer: 2500,
+        });
+
+        // alert("Successfully sold product");
         setTimeout(() => {
           window.location.href = `/`;
         }, 500);
