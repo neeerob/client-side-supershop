@@ -94,7 +94,7 @@ const ProductDetail = () => {
         setNewSaleId("");
 
         Swal.fire({
-          position: "top-end",
+          position: "center",
           icon: "success",
           title: "Successfully sold product",
           showConfirmButton: false,
