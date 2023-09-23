@@ -103,7 +103,6 @@ const DailySalesReportPage = () => {
                   <Table>
                     <TableHead>
                       <TableRow>
-                        {/* <TableCell>Product ID</TableCell> */}
                         <TableCell>Product Name</TableCell>
                         <TableCell>Buying Price</TableCell>
                         <TableCell>Sold Price</TableCell>
@@ -115,7 +114,6 @@ const DailySalesReportPage = () => {
                     <TableBody>
                       {dailySalesData.map((item) => (
                         <TableRow key={item.product_id}>
-                          {/* <TableCell>{item.product_id}</TableCell> */}
                           <TableCell>{item.productName}</TableCell>
                           <TableCell>
                             ${item.totalCostPrice.toFixed(2)}
@@ -126,7 +124,6 @@ const DailySalesReportPage = () => {
                           <TableCell>${item.totalLoss.toFixed(2)}</TableCell>
                         </TableRow>
                       ))}
-                      {/* Total row */}
                       <TableRow
                         style={{ background: "#f0f0f0", fontWeight: "bold" }}
                       >
@@ -149,7 +146,6 @@ const DailySalesReportPage = () => {
                           <b>${total.totalLoss.toFixed(2)}</b>
                         </TableCell>
                       </TableRow>
-                      {/* Net Profit/Loss row */}
                       <TableRow>
                         <TableCell colSpan={5} align="right">
                           Net Profit/Loss:
