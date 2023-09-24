@@ -19,7 +19,9 @@ const DailySalesReportPage = () => {
   const [totalCalculation, setTotalCalculation] = useState([]);
   const [selectedDate, setSelectedDate] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isFutureDate, setisFutureDate] = useState(false);
   const [isNoSale, setIsNoSale] = useState(false);
+  const [isNoSale2, setIsNoSale2] = useState(false);
 
   const fetchDailySalesReport = (createDate) => {
     setIsLoading(true);
@@ -27,25 +29,35 @@ const DailySalesReportPage = () => {
     const data = {
       createDate: createDate,
     };
-
-    axios
-      .post(apiUrl, data)
-      .then((response) => {
-        if (response.data.data.length > 0) {
-          setDailySalesData(response.data.data[0].products);
-          setTotalCalculation(response.data.data[0]);
-          console.log(response.data.data[0]);
-          setIsNoSale(false);
-        } else {
-          setIsNoSale(true);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    const currectdate = new Date();
+    const targetdate = new Date(createDate);
+    if (targetdate > currectdate) {
+      console.log("greater");
+      setisFutureDate(true);
+    } else {
+      setisFutureDate(false);
+      axios
+        .post(apiUrl, data)
+        .then((response) => {
+          console.log("response.data");
+          console.log(response.data);
+          if (response.data.data === null) {
+            setDailySalesData([]);
+            setTotalCalculation([]);
+            setIsNoSale2(true);
+          } else {
+            setDailySalesData(response.data.data.products);
+            setTotalCalculation(response.data.data);
+            setIsNoSale2(false);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
   };
 
   useEffect(() => {
@@ -91,7 +103,107 @@ const DailySalesReportPage = () => {
           InputLabelProps={{ shrink: true }}
         />
       </FormControl>
-      {isLoading ? (
+      {isFutureDate ? (
+        <p>Future date selected...</p>
+      ) : (
+        <>
+          {isLoading ? (
+            <p>Loading...</p>
+          ) : (
+            <>
+              {isNoSale ? (
+                <p> No sales in that day</p>
+              ) : (
+                <>
+                  <p>
+                    <TableContainer
+                      component={Paper}
+                      style={{ marginTop: "16px" }}
+                    >
+                      <Table>
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>Product Name</TableCell>
+                            <TableCell>Buying Price</TableCell>
+                            <TableCell>Sold Price</TableCell>
+                            <TableCell>Quantity</TableCell>
+                            <TableCell>Total Profit</TableCell>
+                            <TableCell>Total Loss</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {dailySalesData.map((item) => (
+                            <TableRow key={item.product_id}>
+                              <TableCell>{item.productName}</TableCell>
+                              <TableCell>
+                                ${item.totalCostPrice.toFixed(2)}
+                              </TableCell>
+                              <TableCell>
+                                ${item.totalRevenue.toFixed(2)}
+                              </TableCell>
+                              <TableCell>{item.totalUnitsSold}</TableCell>
+                              <TableCell>
+                                ${item.totalProfit.toFixed(2)}
+                              </TableCell>
+                              <TableCell>
+                                ${item.totalLoss.toFixed(2)}
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                          <TableRow
+                            style={{
+                              background: "#f0f0f0",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            <TableCell>
+                              <b>Total</b>
+                            </TableCell>
+                            <TableCell>
+                              <b>${total.totalCostPrice.toFixed(2)}</b>
+                            </TableCell>
+                            <TableCell>
+                              <b>${total.totalRevenue.toFixed(2)}</b>
+                            </TableCell>
+                            <TableCell>
+                              <b>{total.totalUnitsSold}</b>
+                            </TableCell>
+                            <TableCell>
+                              <b>${total.totalProfit.toFixed(2)}</b>
+                            </TableCell>
+                            <TableCell>
+                              <b>${total.totalLoss.toFixed(2)}</b>
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            {isNoSale2 ? (
+                              <TableCell colSpan={1} align="left">
+                                <b>No sales in this day </b>
+                              </TableCell>
+                            ) : (
+                              <>
+                                <TableCell colSpan={5} align="right">
+                                  Net Profit/Loss:
+                                </TableCell>
+                                <TableCell
+                                  style={{ color: netProfitLossColor }}
+                                >
+                                  <b>${netProfitLoss.toFixed(2)}</b>
+                                </TableCell>
+                              </>
+                            )}
+                          </TableRow>
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </p>
+                </>
+              )}
+            </>
+          )}
+        </>
+      )}
+      {/* {isLoading ? (
         <p>Loading...</p>
       ) : (
         <>
@@ -148,12 +260,20 @@ const DailySalesReportPage = () => {
                         </TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell colSpan={5} align="right">
-                          Net Profit/Loss:
-                        </TableCell>
-                        <TableCell style={{ color: netProfitLossColor }}>
-                          <b>${netProfitLoss.toFixed(2)}</b>
-                        </TableCell>
+                        {isNoSale2 ? (
+                          <TableCell colSpan={1} align="left">
+                            <b>No sales in this day </b>
+                          </TableCell>
+                        ) : (
+                          <>
+                            <TableCell colSpan={5} align="right">
+                              Net Profit/Loss:
+                            </TableCell>
+                            <TableCell style={{ color: netProfitLossColor }}>
+                              <b>${netProfitLoss.toFixed(2)}</b>
+                            </TableCell>
+                          </>
+                        )}
                       </TableRow>
                     </TableBody>
                   </Table>
@@ -162,7 +282,7 @@ const DailySalesReportPage = () => {
             </>
           )}
         </>
-      )}
+      )} */}
     </Container>
   );
 };
