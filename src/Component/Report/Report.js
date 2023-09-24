@@ -34,6 +34,7 @@ const DailySalesReportPage = () => {
         if (response.data.data.length > 0) {
           setDailySalesData(response.data.data[0].products);
           setTotalCalculation(response.data.data[0]);
+          console.log(response.data.data[0]);
           setIsNoSale(false);
         } else {
           setIsNoSale(true);
