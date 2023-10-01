@@ -143,7 +143,7 @@ function Cart() {
           setsalesIdNeedToPush(salesIdPush);
         } catch (err) {
           console.error(err);
-          alert("SOMETHING WRONG2");
+          // alert("SOMETHING WRONG2");
         }
       });
 
@@ -164,8 +164,21 @@ function Cart() {
             //   "Success: Receipt Number: " +
             //     creatingReceipt.data.data.receiptNumber
             // );
+            // const currectdate = new Date();
+            // const apiUrl = "http://localhost:5000/sales/dailySalesReport";
+            // const data = {
+            //   createDate: currectdate,
+            // };
+            // axios
+            //   .post(apiUrl, data)
+            //   .then((response) => {
+            //     console.log(response);
+            //   })
+            //   .catch((error) => {
+            //     console.log(error);
+            //   });
 
-            window.location.href = `/cart/checkoutinfo/${creatingReceipt.data.data.receiptNumber}`;
+            // window.location.href = `/cart/checkoutinfo/${creatingReceipt.data.data.receiptNumber}`;
           } catch (error) {
             alert("SOMETHING WRONG1");
             console.log(error);

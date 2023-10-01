@@ -20,10 +20,21 @@ const DailySalesReportPage = () => {
   const [totalCalculation, setTotalCalculation] = useState([]);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedMonth, setSelectedMonth] = useState(""); // Add selectedMonth state
+  const [selectedYear, setSelectedYear] = useState(""); // Add selectedYear state
   const [isLoading, setIsLoading] = useState(false);
   const [isFutureDate, setisFutureDate] = useState(false);
   const [isNoSale, setIsNoSale] = useState(false);
   const [isNoSale2, setIsNoSale2] = useState(false);
+  const [emptyMonth, setEmptyMonth] = useState(false);
+
+  const [monthlySalesData, setMonthlySalesData] = useState([]);
+  const [monthlySalesCal, setMonthlySalesCal] = useState({
+    totalCostPrice: 0,
+    totalLoss: 0,
+    totalProfit: 0,
+    totalRevenue: 0,
+    totalUnitsSold: 0,
+  });
 
   const fetchDailySalesReport = (createDate) => {
     setIsLoading(true);
@@ -60,25 +71,40 @@ const DailySalesReportPage = () => {
     }
   };
 
-  const fetchMonthlySalesReport = (selectedMonth) => {
+  const fetchMonthlySalesReport = (selectedMonth, selectedYear) => {
     setIsLoading(true);
     const apiUrl = "http://localhost:5000/sales/monthlySalesReport";
     const data = {
-      selectedMonth: selectedMonth,
+      selectedMonth,
+      selectedYear,
     };
 
     axios
       .post(apiUrl, data)
       .then((response) => {
-        if (response.data.data === null) {
-          setDailySalesData([]);
-          setTotalCalculation([]);
-          setIsNoSale2(true);
+        console.log(response.data.data);
+        if (response.data.data[1].totalUnitsSold == 0) {
+          console.log("empty");
+          setEmptyMonth(true);
+          setMonthlySalesData([]);
+          setMonthlySalesCal({
+            totalCostPrice: 0,
+            totalLoss: 0,
+            totalProfit: 0,
+            totalRevenue: 0,
+            totalUnitsSold: 0,
+          });
         } else {
-          setDailySalesData(response.data.data.products);
-          setTotalCalculation(response.data.data);
-          setIsNoSale2(false);
+          setEmptyMonth(false);
+          console.log("Not empty");
+          setMonthlySalesData(response.data.data[0]);
+          setMonthlySalesCal(response.data.data[1]);
         }
+        // if (response.data.data === null) {
+        //   console.log("empty response");
+        // } else {
+        //   console.log("Something");
+        // }
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -88,13 +114,31 @@ const DailySalesReportPage = () => {
       });
   };
 
+  const handleGenerateReport = () => {
+    if (reportType) {
+      if (selectedDate) {
+        fetchDailySalesReport(selectedDate);
+        console.log("something2");
+      } else {
+        alert("Please select a date for the daily report.");
+      }
+    } else {
+      if (selectedMonth && selectedYear) {
+        fetchMonthlySalesReport(selectedMonth, selectedYear);
+        console.log("something");
+      } else {
+        alert("Please select both month and year for the monthly report.");
+      }
+    }
+  };
+
   useEffect(() => {
     if (selectedDate && reportType) {
       fetchDailySalesReport(selectedDate);
     } else if (selectedMonth && !reportType) {
-      fetchMonthlySalesReport(selectedMonth);
+      fetchMonthlySalesReport(selectedMonth, selectedYear);
     }
-  }, [selectedDate, selectedMonth, reportType]);
+  }, [selectedDate, selectedMonth, selectedYear, reportType]);
 
   const handleDateChange = (event) => {
     setSelectedDate(event.target.value);
@@ -102,6 +146,10 @@ const DailySalesReportPage = () => {
 
   const handleMonthChange = (event) => {
     setSelectedMonth(event.target.value);
+  };
+
+  const handleYearChange = (event) => {
+    setSelectedYear(event.target.value);
   };
 
   const total = dailySalesData.reduce(
@@ -183,7 +231,7 @@ const DailySalesReportPage = () => {
               ) : (
                 <>
                   {isNoSale ? (
-                    <p> No sales in that day</p>
+                    <p> No sales on that day</p>
                   ) : (
                     <>
                       <p>
@@ -249,7 +297,7 @@ const DailySalesReportPage = () => {
                               <TableRow>
                                 {isNoSale2 ? (
                                   <TableCell colSpan={1} align="left">
-                                    <b>No sales in this day </b>
+                                    <b>No sales on this day </b>
                                   </TableCell>
                                 ) : (
                                   <>
@@ -279,28 +327,156 @@ const DailySalesReportPage = () => {
         <Container>
           <h1>Monthly Sales Report</h1>
           <FormControl variant="outlined">
-            <FormControl variant="outlined">
-              <TextField
-                label="Month"
-                type="month"
-                variant="outlined"
-                value={selectedMonth}
-                onChange={handleMonthChange}
-                InputLabelProps={{ shrink: true }}
-                inputProps={{ max: "yyyy-MM" }}
-              />
-            </FormControl>
-            <FormControl variant="outlined">
-              {/* <TextField
-                label="Year"
-                type="number"
-                variant="outlined"
-                value={selectedYear}
-                onChange={handleYearChange}
-              /> */}
-            </FormControl>
+            <TextField
+              label="Month"
+              type="month"
+              variant="outlined"
+              value={selectedMonth}
+              onChange={handleMonthChange}
+              InputLabelProps={{ shrink: true }}
+              inputProps={{ max: "yyyy-MM" }}
+            />
           </FormControl>
-          {/* Rest of the monthly report UI */}
+          <FormControl variant="outlined">
+            <TextField
+              style={{ marginLeft: "20px" }}
+              label="Year"
+              type="number"
+              variant="outlined"
+              value={selectedYear}
+              onChange={handleYearChange}
+            />
+          </FormControl>
+          {emptyMonth ? (
+            <TableContainer component={Paper} style={{ marginTop: "16px" }}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Date</TableCell>
+                    <TableCell>Buying Price</TableCell>
+                    <TableCell>Sold Price</TableCell>
+                    <TableCell>Quantity</TableCell>
+                    <TableCell>Total Profit</TableCell>
+                    <TableCell>Total Loss</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  <TableRow
+                    style={{
+                      background: "#f0f0f0",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    <TableCell colSpan={1} align="left">
+                      <b>No sales on this day </b>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    {isNoSale2 ? (
+                      <TableCell colSpan={1} align="left">
+                        <b>No sales on this day </b>
+                      </TableCell>
+                    ) : (
+                      <>
+                        <TableCell colSpan={5} align="right">
+                          Net Profit/Loss:
+                        </TableCell>
+                        <TableCell style={{ color: netProfitLossColor }}>
+                          {/* <b>${monthlySalesCal.totalLoss.toFixed(2)}</b> */}
+                          <b>
+                            $
+                            {(
+                              monthlySalesCal.totalProfit.toFixed(2) -
+                              monthlySalesCal.totalLoss.toFixed(2)
+                            ).toFixed(2)}
+                          </b>
+                        </TableCell>
+                      </>
+                    )}
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </TableContainer>
+          ) : (
+            <p>
+              <TableContainer component={Paper} style={{ marginTop: "16px" }}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Date</TableCell>
+                      <TableCell>Buying Price</TableCell>
+                      <TableCell>Sold Price</TableCell>
+                      <TableCell>Quantity</TableCell>
+                      <TableCell>Total Profit</TableCell>
+                      <TableCell>Total Loss</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {monthlySalesData.map((item) => (
+                      <TableRow key={item.product_id}>
+                        <TableCell>
+                          {new Date(item.date).toLocaleDateString()}
+                        </TableCell>
+                        <TableCell>${item.totalCostPrice.toFixed(2)}</TableCell>
+                        <TableCell>${item.totalRevenue.toFixed(2)}</TableCell>
+                        <TableCell>{item.totalUnitsSold}</TableCell>
+                        <TableCell>${item.totalProfit.toFixed(2)}</TableCell>
+                        <TableCell>${item.totalLoss.toFixed(2)}</TableCell>
+                      </TableRow>
+                    ))}
+                    <TableRow
+                      style={{
+                        background: "#f0f0f0",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      <TableCell>
+                        <b>Total</b>
+                      </TableCell>
+                      <TableCell>
+                        <b>${monthlySalesCal.totalCostPrice.toFixed(2)}</b>
+                      </TableCell>
+                      <TableCell>
+                        <b>${monthlySalesCal.totalRevenue.toFixed(2)}</b>
+                      </TableCell>
+                      <TableCell>
+                        <b>{monthlySalesCal.totalUnitsSold}</b>
+                      </TableCell>
+                      <TableCell>
+                        <b>${monthlySalesCal.totalProfit.toFixed(2)}</b>
+                      </TableCell>
+                      <TableCell>
+                        <b>${monthlySalesCal.totalLoss.toFixed(2)}</b>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      {isNoSale2 ? (
+                        <TableCell colSpan={1} align="left">
+                          <b>No sales on this day </b>
+                        </TableCell>
+                      ) : (
+                        <>
+                          <TableCell colSpan={5} align="right">
+                            Net Profit/Loss:
+                          </TableCell>
+                          <TableCell style={{ color: netProfitLossColor }}>
+                            {/* <b>${monthlySalesCal.totalLoss.toFixed(2)}</b> */}
+                            <b>
+                              $
+                              {(
+                                monthlySalesCal.totalProfit.toFixed(2) -
+                                monthlySalesCal.totalLoss.toFixed(2)
+                              ).toFixed(2)}
+                            </b>
+                          </TableCell>
+                        </>
+                      )}
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </p>
+          )}
         </Container>
       )}
     </Container>

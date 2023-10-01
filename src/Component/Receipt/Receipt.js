@@ -6,7 +6,7 @@ function Receipt() {
   const [receipts, setReceipts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(4);
-  const [totalPages, setTotalPages] = useState(5);
+  const [totalPages, setTotalPages] = useState(10);
 
   useEffect(() => {
     axios
