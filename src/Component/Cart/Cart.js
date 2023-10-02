@@ -178,7 +178,7 @@ function Cart() {
             //     console.log(error);
             //   });
 
-            // window.location.href = `/cart/checkoutinfo/${creatingReceipt.data.data.receiptNumber}`;
+            window.location.href = `/cart/checkoutinfo/${creatingReceipt.data.data.receiptNumber}`;
           } catch (error) {
             alert("SOMETHING WRONG1");
             console.log(error);

@@ -64,28 +64,37 @@ function ReturnReceipt() {
       const response = await axios.get(url);
       console.log(response);
       setConfirmationOpen(false);
-      let pushDate = receiptData.createDate;
-      const apiUrl = "http://localhost:5000/sales/dailySalesReport";
-      const data = {
-        createDate: pushDate,
-        optional: "override",
-      };
-      axios
-        .post(apiUrl, data)
-        .then((response) => {
-          console.log(response);
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: "Success",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          setReceiptData(null);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Success",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      setReceiptData(null);
+
+      // let pushDate = receiptData.createDate;
+      // const apiUrl = "http://localhost:5000/sales/dailySalesReport";
+      // const data = {
+      //   createDate: pushDate,
+      //   optional: "override",
+      // };
+      // axios
+      //   .post(apiUrl, data)
+      //   .then((response) => {
+      //     console.log(response);
+      //     Swal.fire({
+      //       position: "top-end",
+      //       icon: "success",
+      //       title: "Success",
+      //       showConfirmButton: false,
+      //       timer: 1500,
+      //     });
+      //     setReceiptData(null);
+      //   })
+      //   .catch((error) => {
+      //     console.log(error);
+      //   });
     } catch (error) {
       console.error("Error fetching receipt:", error);
       setIsFetching(false);
