@@ -13,6 +13,7 @@ import CheckoutInfo from "./Component/Checkout/Checkout";
 import SalesPieChart from "./Component/SalesInfo/SalesInfo";
 import ReturnReceipt from "./Component/Receipt/returnReceipt";
 import DailySalesReport from "./Component/Report/Report";
+import Auth from "./Component/login/login";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
         <Route path="/salesinfo" element={<SalesPieChart />} />
         <Route path="/return" element={<ReturnReceipt />} />
         <Route path="/report" element={<DailySalesReport />} />
+        <Route path="/auth" element={<Auth />} />
       </Route>
     </Routes>
   );
