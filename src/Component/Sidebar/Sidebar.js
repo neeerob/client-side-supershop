@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from "react";
 import "../Sidebar/Sidebar.css";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function Sidebar() {
-  // const [currentPage, setCurrentPage] = useState(1);
+  const navigate = useNavigate();
   const location = useLocation();
   const currentPage = location.pathname;
+  const handleLogout = () => {
+    sessionStorage.removeItem("authToken");
+    setTimeout(() => {
+      navigate("/auth");
+    }, 0);
+  };
   return (
     <>
       <div className="area"></div>
@@ -45,15 +51,6 @@ function Sidebar() {
             </a>
           </li>
 
-          {/* <li>
-                   <a href="#">
-                       <i className="fa fa-cogs fa-2x"></i>
-                        <span className="nav-text">
-                            Modify products imformation
-                        </span>
-                    </a>
-                </li> */}
-
           <li>
             <a href="/receipt">
               {currentPage === "/receipt" || currentPage === "../receipt" ? (
@@ -65,21 +62,6 @@ function Sidebar() {
             </a>
           </li>
 
-          {/* <li>
-            <a href="#">
-              <i className="fa fa-book fa-2x"></i>
-              <span className="nav-text">Receopt's imformation</span>
-            </a>
-          </li> */}
-
-          {/* <li>
-                    <a href="#">
-                        <i className="fa fa-minus fa-2x"></i>
-                        <span className="nav-text">
-                           Receopt's imformation
-                        </span>
-                    </a>
-                </li> */}
           <li>
             <a href="/salesinfo">
               {currentPage === "/salesinfo" ||
@@ -91,20 +73,6 @@ function Sidebar() {
               <span className="nav-text">Sale account information</span>
             </a>
           </li>
-
-          {/* <li>
-            <a href="#">
-              <i className="fa fa-info fa-2x"></i>
-              <span className="nav-text">Stock information</span>
-            </a>
-          </li> */}
-
-          {/* <li>
-            <a href="/return">
-              <i className="fa fa-power-off fa-2x"></i>
-              <span className="nav-text">Logout</span>
-            </a>
-          </li> */}
 
           <li>
             <a href="/return">
@@ -127,6 +95,22 @@ function Sidebar() {
               <span className="nav-text">Sales Report</span>
             </a>
           </li>
+
+          <li onClick={handleLogout}>
+            <a href="/report">
+              {currentPage === "/report" ? (
+                <i className="fa fa-power-off fa-2x "></i>
+              ) : (
+                <i className="fa fa-power-off fa-2x"></i>
+              )}
+              <span className="nav-text">Logout</span>
+            </a>
+          </li>
+
+          {/* <li onClick={handleLogout}>
+            <i className="fa fa-power-off fa-2x"></i>
+            <span className="nav-text">Logout</span>
+          </li> */}
         </ul>
       </nav>
     </>

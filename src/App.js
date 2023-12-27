@@ -14,29 +14,38 @@ import SalesPieChart from "./Component/SalesInfo/SalesInfo";
 import ReturnReceipt from "./Component/Receipt/returnReceipt";
 import DailySalesReport from "./Component/Report/Report";
 import Auth from "./Component/login/login";
+import PublicRoute from "./Component/PublicRoute/PublicRoute";
+import PrivateRoute from "./Component/PrivateRoute/PrivateRoute";
 
 function App() {
   return (
     <Routes>
-      <Route element={<Layout />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/addproduct" element={<AddProduct />} />
-        <Route path="/productdetails/:productId" element={<ProductDetail />} />
-        <Route
-          path="/productModify/:productId"
-          element={<ProductDetailModify />}
-        />
-        <Route path="/modify" element={<ModifyProduct />} />
-        <Route
-          path="/updateinformation/:productId"
-          element={<ModifyProductInformation />}
-        />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/receipt" element={<Receipt />} />
-        <Route path="/cart/checkoutinfo/:id" element={<CheckoutInfo />} />
-        <Route path="/salesinfo" element={<SalesPieChart />} />
-        <Route path="/return" element={<ReturnReceipt />} />
-        <Route path="/report" element={<DailySalesReport />} />
+      <Route element={<PrivateRoute />}>
+        <Route element={<Layout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/addproduct" element={<AddProduct />} />
+          <Route
+            path="/productdetails/:productId"
+            element={<ProductDetail />}
+          />
+          <Route
+            path="/productModify/:productId"
+            element={<ProductDetailModify />}
+          />
+          <Route path="/modify" element={<ModifyProduct />} />
+          <Route
+            path="/updateinformation/:productId"
+            element={<ModifyProductInformation />}
+          />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/receipt" element={<Receipt />} />
+          <Route path="/cart/checkoutinfo/:id" element={<CheckoutInfo />} />
+          <Route path="/salesinfo" element={<SalesPieChart />} />
+          <Route path="/return" element={<ReturnReceipt />} />
+          <Route path="/report" element={<DailySalesReport />} />
+        </Route>
+      </Route>
+      <Route element={<PublicRoute />}>
         <Route path="/auth" element={<Auth />} />
       </Route>
     </Routes>

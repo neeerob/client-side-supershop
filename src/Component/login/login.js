@@ -1,7 +1,6 @@
-// AuthPage.js
-
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import {
   Paper,
   Typography,
@@ -14,8 +13,10 @@ import {
 } from "@mui/material";
 import "./login.css";
 import Cookies from "js-cookie";
+import Swal from "sweetalert2";
 
 const AuthPage = () => {
+  const navigate = useNavigate();
   const [isLoginForm, setIsLoginForm] = useState(true);
   const [loginData, setLoginData] = useState({ username: "", password: "" });
   const [registerData, setRegisterData] = useState({
@@ -37,13 +38,25 @@ const AuthPage = () => {
         "http://localhost:5000/auth/login",
         loginData
       );
-      console.log(response.data.data);
-      const token = response.data.data;
-      // Cookies.set("authToken", token);
-      sessionStorage.setItem("authToken", token);
-      // Handle success or redirection here
+      // console.log("dta", response);
+      try {
+        const token = response.data.data;
+        // Cookies.set("authToken", token);
+        sessionStorage.setItem("authToken", token);
+        console.log("Navigating to /");
+        setTimeout(() => {
+          navigate("/");
+        }, 0);
+      } catch (e) {
+        console.log(e);
+      }
     } catch (error) {
       console.error(error.message);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Login failed!",
+      });
       // Handle error and show a message
     }
   };
