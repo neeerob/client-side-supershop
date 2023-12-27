@@ -13,6 +13,7 @@ import {
   InputLabel,
 } from "@mui/material";
 import "./login.css";
+import Cookies from "js-cookie";
 
 const AuthPage = () => {
   const [isLoginForm, setIsLoginForm] = useState(true);
@@ -36,7 +37,10 @@ const AuthPage = () => {
         "http://localhost:5000/auth/login",
         loginData
       );
-      console.log(response.data);
+      console.log(response.data.data);
+      const token = response.data.data;
+      // Cookies.set("authToken", token);
+      sessionStorage.setItem("authToken", token);
       // Handle success or redirection here
     } catch (error) {
       console.error(error.message);
