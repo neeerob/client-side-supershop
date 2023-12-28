@@ -51,7 +51,7 @@ const SalesPieChart = () => {
   useEffect(() => {
     // Make an Axios GET request to fetch the data
     axios
-      .get("http://localhost:5000/sales/monthlysalesreport")
+      .get(`${process.env.REACT_APP_API_URL}/sales/monthlysalesreport`)
       .then((response) => {
         setData(response.data.data[0].monthlySales);
         setMainData(response.data.data[0]);
@@ -61,7 +61,7 @@ const SalesPieChart = () => {
       });
 
     axios
-      .get("http://localhost:5000/sales/yearlysalesreport")
+      .get(`${process.env.REACT_APP_API_URL}/sales/yearlysalesreport`)
       .then((response) => {
         setMainData1(response.data.data[0]);
       })

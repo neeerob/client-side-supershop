@@ -21,7 +21,7 @@ const ProductCard = ({ product, onDelete }) => {
   const handleDeleteProduct = async () => {
     try {
       const data = await axios.delete(
-        `http://localhost:5000/product/delete/${product._id}`
+        `${process.env.REACT_APP_API_URL}/product/delete/${product._id}`
       );
       setOpen(false);
       alert("Successfully deleted!");

@@ -133,7 +133,7 @@ function Cart() {
           quantitySold: getIndividualOrder.quantitySold,
           salePrice: getIndividualOrder.salePrice,
         };
-        const apiUrlPush = `http://localhost:5000/sales/registerSales/${getIndividualOrder.discount}`;
+        const apiUrlPush = `${process.env.REACT_APP_API_URL}/sales/registerSales/${getIndividualOrder.discount}`;
         try {
           const response = await axios.post(apiUrlPush, dataPush);
           const saleIdsArrayOfObject = {
@@ -151,7 +151,7 @@ function Cart() {
         .then(async () => {
           try {
             const creatingReceipt = await axios.post(
-              `http://localhost:5000/receipt/crtrct`,
+              `${process.env.REACT_APP_API_URL}/receipt/crtrct`,
               salesIdPush
             );
             setOpen1(false);
@@ -165,7 +165,7 @@ function Cart() {
             //     creatingReceipt.data.data.receiptNumber
             // );
             // const currectdate = new Date();
-            // const apiUrl = "http://localhost:5000/sales/dailySalesReport";
+            // const apiUrl = `${process.env.REACT_APP_API_URL}/sales/dailySalesReport`;
             // const data = {
             //   createDate: currectdate,
             // };

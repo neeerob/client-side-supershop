@@ -11,7 +11,7 @@ function Receipt() {
   useEffect(() => {
     axios
       .get(
-        `http://localhost:5000/receipt/getAllReceipt?page=${currentPage}&pageSize=${itemsPerPage}`
+        `${process.env.REACT_APP_API_URL}/receipt/getAllReceipt?page=${currentPage}&pageSize=${itemsPerPage}`
       )
       .then((response) => {
         setReceipts(response.data.data);

@@ -56,7 +56,7 @@ const ProductDetail = () => {
   };
 
   const handleSale = async () => {
-    // const apiUrlPush = `http://localhost:5000/sales/registerSales/${discount}`;
+    // const apiUrlPush = `${process.env.REACT_APP_API_URL}/sales/registerSales/${discount}`;
     // const dataPush = {
     //   productId: productId,
     //   quantitySold: quantity,
@@ -114,7 +114,7 @@ const ProductDetail = () => {
   };
 
   useEffect(() => {
-    const apiUrl = `http://localhost:5000/product/${productId}`;
+    const apiUrl = `${process.env.REACT_APP_API_URL}/product/${productId}`;
     axios
       .get(apiUrl)
       .then((response) => {
@@ -127,7 +127,7 @@ const ProductDetail = () => {
 
   useEffect(() => {
     if (productData) {
-      const apiUrl1 = `http://localhost:5000/stock/bypid/${productId}`;
+      const apiUrl1 = `${process.env.REACT_APP_API_URL}/stock/bypid/${productId}`;
       axios
         .get(apiUrl1)
         .then((response) => {

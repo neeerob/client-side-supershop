@@ -16,7 +16,7 @@ function ReturnReceipt() {
   const handleFetchReceipt = async () => {
     setIsFetching(true);
     try {
-      let url = `http://localhost:5000/receipt/getReceiptByReceiptNumber/${receiptNumber}`;
+      let url = `${process.env.REACT_APP_API_URL}/receipt/getReceiptByReceiptNumber/${receiptNumber}`;
       const response = await axios.get(url);
       setReceiptData(response.data.data);
       console.log("hit");
@@ -60,7 +60,7 @@ function ReturnReceipt() {
 
   const returnProduct = async () => {
     try {
-      let url = `http://localhost:5000/receipt/retrnPrdt/${receiptNumber}`;
+      let url = `${process.env.REACT_APP_API_URL}/receipt/retrnPrdt/${receiptNumber}`;
       const response = await axios.get(url);
       console.log(response);
       setConfirmationOpen(false);
@@ -74,7 +74,7 @@ function ReturnReceipt() {
       setReceiptData(null);
 
       // let pushDate = receiptData.createDate;
-      // const apiUrl = "http://localhost:5000/sales/dailySalesReport";
+      // const apiUrl = `${process.env.REACT_APP_API_URL}/sales/dailySalesReport`;
       // const data = {
       //   createDate: pushDate,
       //   optional: "override",

@@ -1,31 +1,31 @@
-import React, { useState } from 'react';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import axios from 'axios';
-import Modal from '@mui/material/Modal';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import Box from '@mui/material/Box';
-import WarningRoundedIcon from '@mui/icons-material/WarningRounded';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import './AddProduct.css';
+import React, { useState } from "react";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import axios from "axios";
+import Modal from "@mui/material/Modal";
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
+import Box from "@mui/material/Box";
+import WarningRoundedIcon from "@mui/icons-material/WarningRounded";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import "./AddProduct.css";
 
 const AddProduct = () => {
   const [product, setProduct] = useState({
-    productName: '',
-    description: '',
-    image: '',
-    price: '',
+    productName: "",
+    description: "",
+    image: "",
+    price: "",
     quantity: 0,
-    isActive: 'true', 
+    isActive: "true",
   });
 
   const [openModal, setOpenModal] = useState(false);
-  const [modalMessage, setModalMessage] = useState('');
-  const [modalColor, setModalColor] = useState('');
-  const [modalMainMsg, setModalMainMsg] = useState('');
+  const [modalMessage, setModalMessage] = useState("");
+  const [modalColor, setModalColor] = useState("");
+  const [modalMainMsg, setModalMainMsg] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,31 +36,31 @@ const AddProduct = () => {
     e.preventDefault();
 
     try {
-      const apiUrl = `http://localhost:5000/product/add/${product.quantity}`;
+      const apiUrl = `${process.env.REACT_APP_API_URL}/product/add/${product.quantity}`;
       console.log(product);
 
       const response = await axios.post(apiUrl, product);
-      console.log('Product added:', response.data);
+      console.log("Product added:", response.data);
 
       setProduct({
-        productName: '',
-        description: '',
-        image: '',
-        price: '',
+        productName: "",
+        description: "",
+        image: "",
+        price: "",
         quantity: 0,
-        isActive: 'true',
+        isActive: "true",
       });
 
-      setModalMessage('Product added successfully!');
-      setModalColor('#4CAF50');
-      setModalMainMsg('Success');
+      setModalMessage("Product added successfully!");
+      setModalColor("#4CAF50");
+      setModalMainMsg("Success");
       setOpenModal(true);
     } catch (error) {
-      console.error('Error adding product:', error);
+      console.error("Error adding product:", error);
 
-      setModalMessage('Error adding product. Please try again.');
-      setModalColor('#F44336');
-      setModalMainMsg('Error');
+      setModalMessage("Error adding product. Please try again.");
+      setModalColor("#F44336");
+      setModalMainMsg("Error");
       setOpenModal(true);
     }
   };
@@ -70,7 +70,15 @@ const AddProduct = () => {
   };
 
   return (
-    <div style={{ justifyContent: 'center', alignItems: 'center', marginTop: '20px', marginRight: '60px', marginLeft: '60px' }}>
+    <div
+      style={{
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: "20px",
+        marginRight: "60px",
+        marginLeft: "60px",
+      }}
+    >
       <form onSubmit={handleSubmit}>
         <TextField
           name="productName"
@@ -82,7 +90,6 @@ const AddProduct = () => {
           onChange={handleChange}
           required
         />
-      
 
         <TextField
           name="price"
@@ -127,7 +134,10 @@ const AddProduct = () => {
           onChange={handleChange}
           row
         >
-          <Typography variant="body1" sx={{ marginRight: '10px', alignSelf: 'center' }}>
+          <Typography
+            variant="body1"
+            sx={{ marginRight: "10px", alignSelf: "center" }}
+          >
             Product Status:
           </Typography>
           <FormControlLabel
@@ -155,21 +165,21 @@ const AddProduct = () => {
           required
         />
 
-{product.image && (
-  <div style={{ textAlign: 'center', marginTop: '20px' }}>
-    <img
-      src={product.image}
-      alt="Product"
-      style={{
-        maxWidth: '100%',
-        maxHeight: '200px',
-        border: '1px solid #ccc',
-        borderRadius: '4px',
-        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-      }}
-    />
-  </div>
-)}
+        {product.image && (
+          <div style={{ textAlign: "center", marginTop: "20px" }}>
+            <img
+              src={product.image}
+              alt="Product"
+              style={{
+                maxWidth: "100%",
+                maxHeight: "200px",
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+              }}
+            />
+          </div>
+        )}
 
         <br />
 
@@ -178,7 +188,7 @@ const AddProduct = () => {
           variant="contained"
           size="large"
           className="button-31"
-          style={{ backgroundColor: '#222', color: '#fff' }}
+          style={{ backgroundColor: "#222", color: "#fff" }}
         >
           Add Product
         </Button>
@@ -187,21 +197,21 @@ const AddProduct = () => {
           open={openModal}
           onClose={handleCloseModal}
           style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
           <div
             style={{
-              backgroundColor: 'white',
-              padding: '20px',
-              borderRadius: '5px',
+              backgroundColor: "white",
+              padding: "20px",
+              borderRadius: "5px",
             }}
           >
             <Typography
               variant="h4"
-              sx={{ display: 'flex', alignItems: 'center' }}
+              sx={{ display: "flex", alignItems: "center" }}
               startIcon={<WarningRoundedIcon />}
               style={{ color: `${modalColor}` }}
             >
@@ -209,11 +219,22 @@ const AddProduct = () => {
             </Typography>
             <Divider />
             <br></br>
-            <Typography variant="body1" sx={{ color: 'text.secondary' }}>
+            <Typography variant="body1" sx={{ color: "text.secondary" }}>
               {modalMessage}
             </Typography>
-            <Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end', pt: 2 }}>
-              <Button variant="outlined" color="primary" onClick={handleCloseModal}>
+            <Box
+              sx={{
+                display: "flex",
+                gap: 1,
+                justifyContent: "flex-end",
+                pt: 2,
+              }}
+            >
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={handleCloseModal}
+              >
                 Close
               </Button>
             </Box>

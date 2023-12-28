@@ -38,7 +38,7 @@ const DailySalesReportPage = () => {
 
   const fetchDailySalesReport = (createDate) => {
     setIsLoading(true);
-    const apiUrl = "http://localhost:5000/sales/dailySalesReport";
+    const apiUrl = `${process.env.REACT_APP_API_URL}/sales/dailySalesReport`;
     const data = {
       createDate: createDate,
     };
@@ -73,7 +73,7 @@ const DailySalesReportPage = () => {
 
   const fetchMonthlySalesReport = (selectedMonth, selectedYear) => {
     setIsLoading(true);
-    const apiUrl = "http://localhost:5000/sales/monthlySalesReport";
+    const apiUrl = `${process.env.REACT_APP_API_URL}/sales/monthlySalesReport`;
     const data = {
       selectedMonth,
       selectedYear,

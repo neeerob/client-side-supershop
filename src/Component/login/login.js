@@ -35,7 +35,7 @@ const AuthPage = () => {
   const handleLogin = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/auth/login",
+        `${process.env.REACT_APP_API_URL}/auth/login`,
         loginData
       );
       // console.log("dta", response);
@@ -72,7 +72,7 @@ const AuthPage = () => {
   const handleRegisterSubmit = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/auth/reg",
+        `${process.env.REACT_APP_API_URL}/auth/reg`,
         registerData
       );
       console.log(response.data);

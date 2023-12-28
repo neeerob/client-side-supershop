@@ -11,7 +11,9 @@ function CheckoutInfo() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/receipt/getReceiptByReceiptNumber/${id}`)
+      .get(
+        `${process.env.REACT_APP_API_URL}/receipt/getReceiptByReceiptNumber/${id}`
+      )
       .then((response) => {
         setReceiptData([response.data.data]);
       })

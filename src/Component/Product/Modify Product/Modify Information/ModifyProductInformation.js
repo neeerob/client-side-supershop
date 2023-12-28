@@ -18,7 +18,7 @@ const ModifyProductInformation = () => {
   const [productData, setProductData] = useState(null);
 
   useEffect(() => {
-    const apiUrl = `http://localhost:5000/product/${productId}`;
+    const apiUrl = `${process.env.REACT_APP_API_URL}/product/${productId}`;
     axios
       .get(apiUrl)
       .then((response) => {
@@ -64,7 +64,7 @@ const ModifyProductInformation = () => {
     e.preventDefault();
 
     try {
-      const apiUrl = `http://localhost:5000/product/update/${productId}`;
+      const apiUrl = `${process.env.REACT_APP_API_URL}/product/update/${productId}`;
       const response = await axios.post(apiUrl, product);
       console.log(product);
       console.log(response);
