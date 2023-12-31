@@ -30,6 +30,7 @@ const PrivateRoute = ({ path, element }) => {
             setIsAuthenticated(false);
           }
         } else {
+          // console.log("No auth token found");
           setIsAuthenticated(false);
         }
       } catch (error) {
