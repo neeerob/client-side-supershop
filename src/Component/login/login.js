@@ -75,10 +75,34 @@ const AuthPage = () => {
         `${process.env.REACT_APP_API_URL}/auth/reg`,
         registerData
       );
-      console.log(response.data);
+
+      if (!response.data.error) {
+        Swal.fire({
+          icon: "success",
+          title: "Registration Successful",
+          text: "You have successfully registered!",
+        });
+
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+        
+      } else {
+        Swal.fire({
+          icon: "error", // Changed icon to "error" for the error case
+          title: "Registration Failed",
+          text: "There was an error with your registration.",
+        });
+      }
+
       // Handle success or redirection here
     } catch (error) {
       console.error(error.message);
+      Swal.fire({
+        icon: "error", // Added Swal.fire to show error message to the user
+        title: "Error",
+        text: "An error occurred during registration.",
+      });
       // Handle error and show a message
     }
   };
